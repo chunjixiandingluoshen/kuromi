@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>可以做我的恋人吗qq？</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: #ffe6f2;
+            font-family: "微软雅黑", sans-serif;
+            padding: 50px;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .title {
+            font-size: 24px;
+            color: #ff1493;
+            margin-bottom: 30px;
+        }
+        
+        /* 图片样式 */
+        .kuromi-img {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+        }
+
+        /* 按钮容器样式 */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 300px;
+        }
+
+        /* 按钮基础样式 */
+        .button {
+            padding: 25px 40px;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 按钮颜色 */
+        #yesButton {
+            background-color: #ff9999;
+            color: white;
+            margin-right: 20px;
+        }
+
+        #noButton {
+            background-color: #99ccff;
+            color: white;
+            margin-left: 20px;
+        }
+
+        /* 禁用状态 */
+        .locked {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">可以做我的恋人吗qq？</div>
+    
+    <!-- 库洛米图片 -->
+    <img id="kuromiImg" class="kuromi-img" src="kuromi_shy.png" alt="Kuromi">
+    
+    <!-- 按钮容器 -->
+    <div class="button-container">
+        <button id="yesButton" class="button" onclick="showLove()">可以</button>
+        <button id="noButton" class="button" onclick="changeNoButton()">不要</button>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        const noTexts = ["啊？", "再想想嘛", "不许选这个呜呜！", "我会很伤心的qaq", "不要啊！"];
+        let noScale = 1;  // 蓝色按钮缩放比例
+        let yesScale = 1; // 红色按钮缩放比例
+
+        // 图片路径
+        const kuromiImages = {
+            shy: "kuromi_shy.png",
+            happy: "kuromi_happy.png",
+            angry: "kuromi_angry.png",
+            annoyed: "kuromi_annoyed.png",
+            sad: "kuromi_sad.png",
+            bigsad: "kuromi_bigsad.png",
+            cry: "kuromi_cry.png",
+            // 新增伤心的库洛米图片
+        };
+
+        function showLove() {
+            // 替换图片为开心的库洛米
+            document.getElementById("kuromiImg").src = kuromiImages.happy;
+            
+            // 替换页面内容
+            document.body.innerHTML = `
+                <div style="font-size: 48px; color: #ff1493;">
+                    笨蛋qq
+                </div>
+                <img class="kuromi-img" src="${kuromiImages.happy}" alt="Kuromi Happy">
+            `;
+        }
+
+        function changeNoButton() {
+            const noButton = document.getElementById("noButton");
+            const yesButton = document.getElementById("yesButton");
+            const kuromiImg = document.getElementById("kuromiImg");
+
+            // 前5次点击时改变文字
+            if (clickCount < 5) {
+                noButton.textContent = noTexts[clickCount];
+                clickCount++;
+            }
+
+            // 前5次点击时改变图片
+            if (clickCount === 1) {
+                kuromiImg.src = kuromiImages.angry; // 第一次点击，库洛米生气
+            } else if (clickCount === 2) {
+                kuromiImg.src = kuromiImages.sad; // 第二次点击，库洛米伤心
+            } else if (clickCount === 3) {
+                kuromiImg.src = kuromiImages.annoyed; // 第三次点击，库洛米不耐烦
+            }else if (clickCount === 4){
+                kuromiImg.src = kuromiImages.bigsad; // 第四次点击，库洛米正常
+            } else if (clickCount === 5) {
+                kuromiImg.src = kuromiImages.cry// 第五次点击，库洛米开心
+            }
+
+            // 前5次点击时改变大小
+            if (clickCount <= 5) {
+                noScale *= 0.85;
+                yesScale *= 1.15;
+                noButton.style.transform = `scale(${noScale})`;
+                yesButton.style.transform = `scale(${yesScale})`;
+            }
+
+            // 第5次点击后锁定状态
+            if (clickCount === 5) {
+                noButton.textContent = "不要！";
+                yesButton.textContent = "可以";
+                
+                // 持续缩小/放大效果
+                const shrinkInterval = setInterval(() => {
+                    noScale *= 0.95;
+                    yesScale *= 1.05;
+                    noButton.style.transform = `scale(${noScale})`;
+                    yesButton.style.transform = `scale(${yesScale})`;
+                    
+                    if (noScale < 0.1) clearInterval(shrinkInterval);
+                }, 200);
+
+                // 禁用按钮点击
+                noButton.classList.add('locked');
+            }
+        }
+    </script>
+</body>
+</html>
